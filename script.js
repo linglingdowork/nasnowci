@@ -105,9 +105,9 @@ if (window.Telegram && window.Telegram.WebApp) {
                 category: 'STREAMING APPS', id: 'pidioookk', name: 'Pidioookk', image: 'image/vidio.png',
                 stepLabels: ['Choose device', 'Choose plan', 'Choose duration'], // 3 Tahap khusus Pidioookk
                 data: {
-                    'TV': { 'SHARING': { '1 MONTH': 17000 } },
-                    'MOBILE': { 'SHARING': { '1 MONTH': 30000 } },
-                    'ALL DEVICE': { 'SHARING': { '1 MONTH': 45000 } }
+                    'TV': { 'PRIVATE': { '1 MONTH': 17000 } },
+                    'MOBILE': { 'PRIVATE': { '1 MONTH': 30000 } },
+                    'ALL DEVICE': { 'PRIVATE': { '1 MONTH': 45000 } }
                 }
             },
             {
