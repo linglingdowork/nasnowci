@@ -487,15 +487,22 @@ function processOrder() {
     orderText += `────────────────────\n`;
     orderText += `PESANAN\n\n`;
 
-    cart.forEach((item, index) => {
-        const subtotal = item.price * item.qty;
-        totalPrice += subtotal;
+cart.forEach((item, index) => {
+    const subtotal = item.price * item.qty;
+    totalPrice += subtotal;
 
-        orderText += `${index + 1}. ${item.name}\n`;
+    orderText += `${index + 1}. ${item.name}\n`;
+
+    if (item.id === 'canva') {
+        orderText += `   ${item.selections[0]} • ${item.selections[1]}\n`;
+        orderText += `   Email: ${item.selections[2]}\n`;
+    } else {
         orderText += `   ${item.selections.join(" • ")}\n`;
-        orderText += `   Qty: ${item.qty}\n`;
-        orderText += `   ${formatRupiah(subtotal)}\n\n`;
-    });
+    }
+
+    orderText += `   Qty: ${item.qty}\n`;
+    orderText += `   ${formatRupiah(subtotal)}\n\n`;
+});
 
     orderText += `────────────────────\n`;
     orderText += `TOTAL: ${formatRupiah(totalPrice)}\n\n`;
