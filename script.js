@@ -144,7 +144,7 @@ if (window.Telegram && window.Telegram.WebApp) {
             },
             {
                 category: 'EDITING APPS', id: 'capcut', name: 'CapCut', image: 'image/capcut.png',
-                stepLabels: ['Choose your plan', 'Choose duration'],
+                stepLabels: ['Choose your plan', 'Choose duration', 'Enter email'],
                 data: {
                     'SHARING': { '1 DAY': 3000, '2 DAYS': 5000, '3 DAYS': 7000, '7 DAYS': 9000 },
                     'PRIVATE': { '7 DAYS': 25000, '1 MONTH': 35000 }
@@ -233,88 +233,180 @@ if (window.Telegram && window.Telegram.WebApp) {
         }
 
         // Tampilkan Tombol Pilihan sesuai Tahap
-        function renderProductSteps() {
-            const stepContainer = document.getElementById('step-container');
-            const summaryContainer = document.getElementById('summary-container');
-            const optionsContainer = document.getElementById('options-container');
-            const stepLabel = document.getElementById('step-label');
+       function renderProductSteps() {
+    const stepContainer = document.getElementById('step-container');
+    const summaryContainer = document.getElementById('summary-container');
+    const optionsContainer = document.getElementById('options-container');
+    const stepLabel = document.getElementById('step-label');
 
-            // Ambil data berdasarkan pilihan yang sudah dilakukan
-            let currentDataLevel = currentProduct.data;
-            for (let i = 0; i < currentSelections.length; i++) {
-                currentDataLevel = currentDataLevel[currentSelections[i]];
-            }
+    let currentDataLevel = currentProduct.data;
 
-            // Cek apakah sudah di tahap akhir (mencapai harga)
-            if (currentSelections.length === currentProduct.stepLabels.length) {
-                // TAMPILKAN SUMMARY
-                stepContainer.style.display = 'none';
-                summaryContainer.style.display = 'block';
+    // Ambil data berdasarkan pilihan sebelumnya
+    for (let i = 0; i < currentSelections.length; i++) {
+        currentDataLevel = currentDataLevel[currentSelections[i]];
+    }
 
-                document.getElementById('summary-app-name').innerText = currentProduct.name;
-                document.getElementById('summary-details').innerHTML = currentSelections.join(' <br> ');
-                document.getElementById('summary-price').innerText = formatRupiah(currentDataLevel);
-            } else {
-                // TAMPILKAN PILIHAN
-                stepContainer.style.display = 'block';
-                summaryContainer.style.display = 'none';
-                
-                stepLabel.innerText = currentProduct.stepLabels[currentSelections.length];
-                optionsContainer.innerHTML = '';
+    // =========================
+    // KHUSUS CANVA: INPUT EMAIL
+    // =========================
+    if (
+        currentProduct.id === 'canva' &&
+        currentSelections.length === 2
+    ) {
+        stepContainer.style.display = 'block';
+        summaryContainer.style.display = 'none';
 
-                // Generate tombol
-                const options = Object.keys(currentDataLevel);
-                options.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = opt;
-                    
-                    // Animasi klik sebelum lanjut
-                    btn.onclick = () => {
-                        btn.classList.add('active-simulated');
-                        setTimeout(() => {
-                            currentSelections.push(opt);
-                            renderProductSteps();
-                        }, 150);
-                    };
-                    
-                    optionsContainer.appendChild(btn);
-                });
-            }
+        stepLabel.innerText = 'Enter email';
+
+        optionsContainer.innerHTML = `
+            <div style="width: 100%; max-width: 400px; margin: 0 auto;">
+                <input
+                    type="email"
+                    id="canva-email"
+                    placeholder="Masukkan email Canva"
+                    style="
+                        width: 100%;
+                        box-sizing: border-box;
+                        padding: 14px;
+                        border: 1px solid #73151B;
+                        border-radius: 8px;
+                        font-size: 15px;
+                        margin-bottom: 12px;
+                    "
+                >
+
+                <button
+                    class="option-btn"
+                    onclick="submitCanvaEmail()"
+                    style="width: 100%;"
+                >
+                    Continue
+                </button>
+            </div>
+        `;
+
+        return;
+    }
+
+    // =========================
+    // SUMMARY
+    // =========================
+    if (currentSelections.length === currentProduct.stepLabels.length) {
+        stepContainer.style.display = 'none';
+        summaryContainer.style.display = 'block';
+
+        document.getElementById('summary-app-name').innerText =
+            currentProduct.name;
+
+        // Jangan tampilkan email sebagai pilihan biasa
+        if (currentProduct.id === 'canva') {
+            document.getElementById('summary-details').innerHTML =
+                `${currentSelections[0]} <br>
+                 ${currentSelections[1]} <br>
+                 Email: ${currentSelections[2]}`;
+        } else {
+            document.getElementById('summary-details').innerHTML =
+                currentSelections.join(' <br> ');
         }
 
-        // Tambah ke Keranjang
-        function addToCart() {
-            // Ambil harga
-            let price = currentProduct.data;
-            for (let i = 0; i < currentSelections.length; i++) {
-                price = price[currentSelections[i]];
-            }
+        // Harga Canva tetap diambil dari plan + durasi
+        let priceData = currentProduct.data;
 
-            const cartItem = {
-                id: currentProduct.id,
-                name: currentProduct.name,
-                selections: [...currentSelections],
-                price: price,
-                qty: 1
+        priceData = priceData[currentSelections[0]];
+        priceData = priceData[currentSelections[1]];
+
+        document.getElementById('summary-price').innerText =
+            formatRupiah(priceData);
+
+    } else {
+        // =========================
+        // PILIHAN BIASA
+        // =========================
+        stepContainer.style.display = 'block';
+        summaryContainer.style.display = 'none';
+
+        stepLabel.innerText =
+            currentProduct.stepLabels[currentSelections.length];
+
+        optionsContainer.innerHTML = '';
+
+        const options = Object.keys(currentDataLevel);
+
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+
+            btn.onclick = () => {
+                btn.classList.add('active-simulated');
+
+                setTimeout(() => {
+                    currentSelections.push(opt);
+                    renderProductSteps();
+                }, 150);
             };
 
-            // Cek apakah barang yang SAMA PERSIS sudah ada di keranjang
-            const existingItem = cart.find(item => 
-                item.id === cartItem.id && 
-                item.selections.join('|') === cartItem.selections.join('|')
-            );
+            optionsContainer.appendChild(btn);
+        });
+    }
+}
 
-            if (existingItem) {
-                existingItem.qty += 1;
-            } else {
-                cart.push(cartItem);
-            }
+function submitCanvaEmail() {
+    const emailInput = document.getElementById('canva-email');
+    const email = emailInput.value.trim();
 
-            updateCartBadge();
-            showToast('Added to Cart!');
-            navigate('category'); // Kembali ke katalog untuk belanja lagi
-        }
+    if (!email) {
+        showToast('Email wajib diisi!');
+        return;
+    }
+
+    if (!emailInput.checkValidity()) {
+        showToast('Format email tidak valid!');
+        return;
+    }
+
+    currentSelections.push(email);
+
+    renderProductSteps();
+}
+        // Tambah ke Keranjang
+function addToCart() {
+    let price = currentProduct.data;
+
+    // Canva hanya menggunakan 2 pilihan untuk menentukan harga
+    const priceSelections =
+        currentProduct.id === 'canva'
+            ? currentSelections.slice(0, 2)
+            : currentSelections;
+
+    for (let i = 0; i < priceSelections.length; i++) {
+        price = price[priceSelections[i]];
+    }
+
+    const cartItem = {
+        id: currentProduct.id,
+        name: currentProduct.name,
+        selections: [...currentSelections],
+        price: price,
+        qty: 1
+    };
+
+    const existingItem = cart.find(item =>
+        item.id === cartItem.id &&
+        item.selections.join('|') === cartItem.selections.join('|')
+    );
+
+    if (existingItem) {
+        existingItem.qty += 1;
+    } else {
+        cart.push(cartItem);
+    }
+
+    updateCartBadge();
+    showToast('Added to Cart!');
+    navigate('category');
+}
 
         function updateCartBadge() {
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
