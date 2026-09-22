@@ -391,26 +391,33 @@ if (window.Telegram && window.Telegram.WebApp) {
         function processOrder() {
     let totalPrice = 0;
 
-    let orderText = `Halo, saya mau order\n\n`;
+    let orderText = `NASNOWCI — ORDER\n\n`;
 
-    orderText += `Pesanan:\n\n`;
+    orderText += `────────────────────\n`;
+    orderText += `PESANAN\n\n`;
 
     cart.forEach((item, index) => {
         totalPrice += item.price * item.qty;
 
         orderText += `${index + 1}. ${item.name}\n`;
         orderText += `   ${item.selections.join(" • ")}\n`;
-        orderText += `   Qty: ${item.qty}\n\n`;
+        orderText += `   Qty: ${item.qty}\n`;
+        orderText += `   ${formatRupiah(item.price * item.qty)}\n\n`;
     });
 
-    orderText += `Total: ${formatRupiah(totalPrice)}\n\n`;
+    orderText += `────────────────────\n`;
+    orderText += `TOTAL: ${formatRupiah(totalPrice)}\n\n`;
+
     orderText += `Username:\n`;
     orderText += `@__________\n\n`;
 
-    orderText += `Device login:\n`;
-    orderText += `\n`;
+    orderText += `Device Login:\n`;
+    orderText += `________________\n\n`;
 
-    orderText += `Payment: Qris`;
+    orderText += `Payment:\n`;
+    orderText += `QRIS\n`;
+
+    orderText += `────────────────────`;
 
     const textarea = document.createElement('textarea');
     textarea.value = orderText;
@@ -425,6 +432,9 @@ if (window.Telegram && window.Telegram.WebApp) {
         console.error('Failed to copy text:', err);
         showToast("Gagal copy order");
     }
+
+    document.body.removeChild(textarea);
+}
 
     document.body.removeChild(textarea);
 }
