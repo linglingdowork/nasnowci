@@ -435,12 +435,6 @@ if (window.Telegram && window.Telegram.WebApp) {
 
     document.body.removeChild(textarea);
 }
-
-    document.body.removeChild(textarea);
-}
-
-    document.body.removeChild(textarea);
-}
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
