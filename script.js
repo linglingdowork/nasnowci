@@ -388,7 +388,7 @@ if (window.Telegram && window.Telegram.WebApp) {
             renderCart();
         }
 
-    function processOrder() {
+function processOrder() {
     let totalPrice = 0;
 
     let orderText = `NASNOWCI — ORDER\n\n`;
@@ -396,12 +396,12 @@ if (window.Telegram && window.Telegram.WebApp) {
     orderText += `PESANAN\n\n`;
 
     cart.forEach((item, index) => {
-        const subtotal = item.price * item.quantity;
+        const subtotal = item.price * item.qty;
         totalPrice += subtotal;
 
         orderText += `${index + 1}. ${item.name}\n`;
         orderText += `   ${item.selections.join(" • ")}\n`;
-        orderText += `   Qty: ${item.quantity}\n`;
+        orderText += `   Qty: ${item.qty}\n`;
         orderText += `   ${formatRupiah(subtotal)}\n\n`;
     });
 
