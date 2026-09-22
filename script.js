@@ -392,11 +392,11 @@ if (window.Telegram && window.Telegram.WebApp) {
     let totalPrice = 0;
 
     let orderText = `NASNOWCI — ORDER\n\n`;
-
     orderText += `────────────────────\n`;
     orderText += `PESANAN\n\n`;
 
     cart.forEach((item, index) => {
+        const subtotal = item.price * item.quantity;
         totalPrice += item.price * item.qty;
 
         orderText += `${index + 1}. ${item.name}\n`;
