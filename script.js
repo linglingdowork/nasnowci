@@ -151,8 +151,11 @@ const database = [
                 '7 DAYS': 15000,
                 '1 MONTH': 24000
             },
-            'PRIVATE': {
-                '1 MONTH': 90000
+            'PRIVATE BASIC': {
+                '1 MONTH': 45000
+            },
+            'PRIVATE ULTIMATE': {
+                 '1 MONTH': 90000
             }
         }
     },
@@ -241,7 +244,7 @@ const database = [
             },
             'INDPLAN': {
                 '1 MONTH': 25000,
-                '2 MONTHS': 35000
+                '2 MONTHS': 45000
             }
         }
     },
