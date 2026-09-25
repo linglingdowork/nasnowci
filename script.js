@@ -26,6 +26,7 @@ const database = [
     // ================== STREAMING APPS ==================
 
     {
+    {
         category: 'STREAMING APPS',
         id: 'netflix',
         name: 'Netflix',
@@ -371,7 +372,6 @@ const database = [
         }
     }
 ];
-
 
 
 // ============================================================
@@ -1076,47 +1076,33 @@ function renderCart() {
         orderForm = document.createElement('div');
         orderForm.id = 'order-form';
         orderForm.style.cssText = `
-            margin: 16px 0;
-            padding: 14px;
-            border: 1px solid rgba(115, 21, 27, 0.25);
+            margin: 14px 0 0;
+            padding: 16px;
+            border: 1px solid rgba(115, 21, 27, 0.22);
             border-radius: 12px;
             background: #fffaf2;
         `;
 
         orderForm.innerHTML = `
-            <div style="font-weight:700; margin-bottom:10px;">CUSTOMER</div>
+            <div style="font-weight:700; font-size:18px; color:#73151B; margin-bottom:14px;">CUSTOMER</div>
 
             <label style="display:block; font-size:13px; margin-bottom:5px;">Username Telegram</label>
             <div style="display:flex; align-items:center; border:1px solid #73151B; border-radius:8px; overflow:hidden; background:#fff; margin-bottom:10px;">
                 <span style="padding:11px 0 11px 12px; color:#73151B; font-weight:600;">@</span>
-                <input
-                    type="text"
-                    id="order-username"
-                    placeholder="username"
-                    autocomplete="off"
-                    style="flex:1; min-width:0; border:0; outline:0; padding:11px 12px 11px 4px; font:inherit; background:transparent;"
-                >
+                <input type="text" id="order-username" placeholder="username" autocomplete="off" style="flex:1; min-width:0; border:0; outline:0; padding:11px 12px 11px 4px; font:inherit; background:transparent;">
             </div>
 
             <label style="display:block; font-size:13px; margin-bottom:5px;">Device Login</label>
-            <input
-                type="text"
-                id="order-device"
-                placeholder="contoh: Android / iPhone / Laptop"
-                style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; margin-bottom:10px; font:inherit;"
-            >
+            <input type="text" id="order-device" placeholder="contoh: TV / Android / IOS" style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; margin-bottom:10px; font:inherit; background:#fff;">
 
             <label style="display:block; font-size:13px; margin-bottom:5px;">Payment</label>
-            <select
-                id="order-payment"
-                style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; font:inherit; background:#fff;"
-            >
-            
-            </select>
+            <input type="text" value="QRIS" readonly style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; font:inherit; background:#fff; color:#333;">
+            <input type="hidden" id="order-payment" value="QRIS">
         `;
 
         footer.insertBefore(orderForm, footer.firstChild);
     }
+
 }
 
 
@@ -1217,9 +1203,7 @@ function processOrder() {
         `Username: ${username}\n` +
         `Device: ${device}\n` +
         `Payment: ${payment}\n` +
-        `━━━━━━━━━━━━━━━━━━━━\n` +
-        `      THANK YOU ♡\n` +
-        `     NASNOWCI STORE`;
+        `━━━━━━━━━━━━━━━━━━━━\n`;
 
     const textarea = document.createElement('textarea');
     textarea.value = orderText;
