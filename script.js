@@ -37,10 +37,12 @@ const database = [
                 '2 DAYS': 6000,
                 '3 DAYS': 9000,
                 '5 DAYS': 12000,
-                '7 DAYS': 15000,
-                '14 DAYS': 24000,
-                '21 DAYS': 34000,
-                '1 MONTH': 45000
+                '1 WEEK': 15000,
+                '2 WEEKS': 24000,
+                '3 WEEKS': 34000,
+                '1 MONTH': 45000,
+                '2 MONTHS': 70000,
+                '3 MONTHS': 105000
             },
             'PRIVATE': {
                 '1 MONTH': 175000
@@ -60,9 +62,9 @@ const database = [
                 '2 DAYS': 7000,
                 '3 DAYS': 10000,
                 '5 DAYS': 13000,
-                '7 DAYS': 15000,
-                '14 DAYS': 22000,
-                '21 DAYS': 30000,
+                '1 WEEK': 15000,
+                '2 WEEKS': 22000,
+                '3 WEEKS': 30000,
                 '1 MONTH': 35000
             },
             'PRIVATE': {
@@ -83,7 +85,7 @@ const database = [
                 '2 DAYS': 3000,
                 '3 DAYS': 4000,
                 '5 DAYS': 5000,
-                '7 DAYS': 6000,
+                '1 WEEK': 6000,
                 '1 MONTH': 10000,
                 '2 MONTHS': 15000,
                 '3 MONTHS': 17000,
@@ -369,6 +371,7 @@ const database = [
         }
     }
 ];
+
 
 
 // ============================================================
@@ -1065,6 +1068,55 @@ function renderCart() {
         'cart-total-price'
     ).innerText =
         formatRupiah(totalPrice);
+
+    // Form data buyer untuk order
+    let orderForm = document.getElementById('order-form');
+
+    if (!orderForm) {
+        orderForm = document.createElement('div');
+        orderForm.id = 'order-form';
+        orderForm.style.cssText = `
+            margin: 16px 0;
+            padding: 14px;
+            border: 1px solid rgba(115, 21, 27, 0.25);
+            border-radius: 12px;
+            background: #fffaf2;
+        `;
+
+        orderForm.innerHTML = `
+            <div style="font-weight:700; margin-bottom:10px;">CUSTOMER</div>
+
+            <label style="display:block; font-size:13px; margin-bottom:5px;">Username Telegram</label>
+            <div style="display:flex; align-items:center; border:1px solid #73151B; border-radius:8px; overflow:hidden; background:#fff; margin-bottom:10px;">
+                <span style="padding:11px 0 11px 12px; color:#73151B; font-weight:600;">@</span>
+                <input
+                    type="text"
+                    id="order-username"
+                    placeholder="username"
+                    autocomplete="off"
+                    style="flex:1; min-width:0; border:0; outline:0; padding:11px 12px 11px 4px; font:inherit; background:transparent;"
+                >
+            </div>
+
+            <label style="display:block; font-size:13px; margin-bottom:5px;">Device Login</label>
+            <input
+                type="text"
+                id="order-device"
+                placeholder="contoh: Android / iPhone / Laptop"
+                style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; margin-bottom:10px; font:inherit;"
+            >
+
+            <label style="display:block; font-size:13px; margin-bottom:5px;">Payment</label>
+            <select
+                id="order-payment"
+                style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; font:inherit; background:#fff;"
+            >
+            
+            </select>
+        `;
+
+        footer.insertBefore(orderForm, footer.firstChild);
+    }
 }
 
 
@@ -1113,140 +1165,81 @@ function removeItem(index) {
 
 function processOrder() {
 
+    if (cart.length === 0) {
+        showToast("CART MASIH KOSONG!");
+        return;
+    }
+
     let totalPrice = 0;
 
+    const usernameInput = document.getElementById('order-username');
+    const deviceInput = document.getElementById('order-device');
+    const paymentInput = document.getElementById('order-payment');
+
+    // Buyer cukup mengetik username tanpa @
+    const usernameRaw = usernameInput?.value.trim().replace(/^@+/, '') || '';
+    const username = usernameRaw ? `@${usernameRaw}` : '@__________';
+    const device = deviceInput?.value.trim() || '________________';
+    const payment = paymentInput?.value || 'QRIS';
 
     let orderText =
-        `NASNOWCI — ORDER\n\n`;
-
-
-    orderText +=
-        `────────────────────\n`;
-
-    orderText +=
-        `PESANAN\n\n`;
-
+        `━━━━━━━━━━━━━━━━━━━━
+` +
+        `       NASNOWCI
+` +
+        `         ORDER
+` +
+        `━━━━━━━━━━━━━━━━━━━━
+` +
+        `PESANAN
+`;
 
     cart.forEach((item, index) => {
 
-        const subtotal =
-            item.price * item.qty;
-
+        const subtotal = item.price * item.qty;
         totalPrice += subtotal;
 
+        orderText += `\n${index + 1}. ${item.name}\n`;
+        orderText += `   ${item.selections.join(' • ')}\n`;
 
-        orderText +=
-            `${index + 1}. ${item.name}\n`;
-
-
-        // =========================
-        // CANVA
-        // =========================
-
-        if (item.id === 'canva') {
-
-            orderText +=
-                `   ${item.selections[0]} • ${item.selections[1]}\n`;
-
-            orderText +=
-                `   Email: ${item.email}\n`;
-
+        if (item.id === 'canva' && item.email) {
+            orderText += `   Email: ${item.email}\n`;
         }
 
-        // =========================
-        // PRODUK LAIN
-        // =========================
-
-        else {
-
-            orderText +=
-                `   ${item.selections.join(" • ")}\n`;
-
-        }
-
-
-        orderText +=
-            `   Qty: ${item.qty}\n`;
-
-        orderText +=
-            `   ${formatRupiah(subtotal)}\n\n`;
-
+        orderText += `   Qty: ${item.qty} | ${formatRupiah(subtotal)}\n`;
     });
 
-
     orderText +=
-        `────────────────────\n`;
+        `\n━━━━━━━━━━━━━━━━━━━━\n` +
+        `TOTAL: ${formatRupiah(totalPrice)}\n` +
+        `━━━━━━━━━━━━━━━━━━━━\n` +
+        `CUSTOMER\n` +
+        `Username: ${username}\n` +
+        `Device: ${device}\n` +
+        `Payment: ${payment}\n` +
+        `━━━━━━━━━━━━━━━━━━━━\n` +
+        `      THANK YOU ♡\n` +
+        `     NASNOWCI STORE`;
 
-    orderText +=
-        `TOTAL: ${formatRupiah(totalPrice)}\n\n`;
-
-
-    orderText +=
-        `Username:\n`;
-
-    orderText +=
-        `@__________\n\n`;
-
-
-    orderText +=
-        `Device Login:\n`;
-
-    orderText +=
-        `________________\n\n`;
-
-
-    orderText +=
-        `Payment:\n`;
-
-    orderText +=
-        `QRIS\n`;
-
-
-    orderText +=
-        `────────────────────`;
-
-
-    const textarea =
-        document.createElement('textarea');
-
-
-    textarea.value =
-        orderText;
-
-
-    document.body.appendChild(
-        textarea
-    );
-
-
+    const textarea = document.createElement('textarea');
+    textarea.value = orderText;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    textarea.style.top = '0';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.focus();
     textarea.select();
 
-
     try {
-
         document.execCommand('copy');
-
-        showToast(
-            "ORDER COPIED!"
-        );
-
+        showToast('ORDER COPIED!');
     } catch (err) {
-
-        console.error(
-            'Failed to copy text:',
-            err
-        );
-
-        showToast(
-            "Gagal copy order"
-        );
-
+        console.error('Failed to copy text:', err);
+        showToast('Gagal copy order');
     }
 
-
-    document.body.removeChild(
-        textarea
-    );
+    document.body.removeChild(textarea);
 }
 
 
