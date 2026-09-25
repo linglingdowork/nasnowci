@@ -3,121 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>nasnowci - Digital Essentials</title>
-    
-    <!-- Telegram Web App Script -->
+    <title>Nasnowci - apps premium store</title>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <!-- Google Fonts untuk Vintage Aesthetic -->
+    <!-- Google Font: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ========================================== -->
-    <!-- MULAI BAGIAN HTML (index.html)             -->
-    <!-- ========================================== -->
-    <div class="app-container">
-        
-        <!-- Header -->
-        <header>
-            <a href="#" class="brand-logo" onclick="navigate('home')">nasnowci</a>
-            <button class="cart-btn" onclick="navigate('cart')">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
-                <span class="cart-badge" id="cart-badge">0</span>
-            </button>
-        </header>
+<div class="app-container">
 
-        <div id="view-home" class="view-section active">
-            <h1 class="title-large" style="margin-top: 20px;">MENU</h1>
-            <p class="subtitle">your digital essentials</p>
+    <header>
+        <a href="#" class="brand-logo" onclick="navigate('home'); return false;">nasnowci</a>
 
-            <div class="vintage-card" onclick="openCategory('STREAMING APPS')">
-                <h3>STREAMING APPS</h3>
-                <p>explore collection ✦</p>
-            </div>
+        <button class="cart-btn" onclick="navigate('cart')">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+    </header>
 
-            <div class="vintage-card" onclick="openCategory('EDITING APPS')">
-                <h3>EDITING APPS</h3>
-                <p>explore collection ✦</p>
-            </div>
+    <div id="view-home" class="view-section active">
+        <h1 class="title-large" style="margin-top: 20px;">CATALOGUE</h1>
+        <p class="subtitle">store app premiums terbaik! ✦</p>
+
+        <div class="vintage-card" onclick="openCategory('STREAMING APPS')">
+            <h3>STREAMING APPS</h3>
+            <p>explore collection ✦</p>
         </div>
 
-        <div id="view-category" class="view-section">
-            <button class="back-btn" onclick="navigate('home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                BACK
-            </button>
-            <h2 class="section-title" id="category-title">CATEGORY</h2>
-            <div class="app-grid" id="app-list-container">
-                <!-- Diisi otomatis oleh JavaScript -->
-            </div>
+        <div class="vintage-card" onclick="openCategory('EDITING APPS')">
+            <h3>EDITING APPS</h3>
+            <p>explore collection ✦</p>
         </div>
-
-        <div id="view-product" class="view-section">
-            <button class="back-btn" onclick="goBackProductStep()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                BACK
-            </button>
-            
-            <div class="product-header">
-                <img id="product-image" src="" alt="App Logo">
-                <h2 class="section-title" id="product-title" style="margin-bottom: 0;">APP NAME</h2>
-            </div>
-
-            <!-- Area untuk pilihan bertahap -->
-            <div id="step-container">
-                <h3 class="step-label" id="step-label">Choose your plan</h3>
-                <div class="options-grid" id="options-container">
-                    <!-- Diisi otomatis oleh JS -->
-                </div>
-            </div>
-
-            <!-- Area Summary Harga (muncul di akhir) -->
-            <div id="summary-container" style="display: none;">
-                <div class="summary-card">
-                    <h3 class="summary-title" id="summary-app-name">App Name</h3>
-                    <div class="summary-details" id="summary-details">
-                        Plan<br>Duration
-                    </div>
-                    <div class="summary-price" id="summary-price">Rp 0</div>
-                    <button class="btn-primary" onclick="addToCart()">ADD TO CART</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-cart" class="view-section">
-            <button class="back-btn" onclick="navigate('home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                BACK TO MENU
-            </button>
-            <h2 class="section-title">YOUR CART</h2>
-            
-            <div id="cart-items-container">
-                <!-- Diisi otomatis oleh JS -->
-            </div>
-
-            <div id="cart-footer">
-                <div class="cart-total-section">
-                    <div class="cart-total-row">
-                        <span>TOTAL</span>
-                        <span id="cart-total-price">Rp 0</span>
-                    </div>
-                    <button class="btn-primary" onclick="processOrder()">PESAN SEKARANG</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Toast Notification -->
-        <div id="toast" class="toast">ORDER COPIED!</div>
-
     </div>
-    <script src="script.js"></script>
+
+    <div id="view-category" class="view-section">
+        <button class="back-btn" onclick="navigate('home')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            BACK
+        </button>
+        <h2 class="section-title" id="category-title">CATEGORY</h2>
+        <div class="app-grid" id="app-list-container"></div>
+    </div>
+
+    <div id="view-product" class="view-section">
+        <button class="back-btn" onclick="goBackProductStep()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            BACK
+        </button>
+
+        <div class="product-header">
+            <img id="product-image" src="" alt="App Logo">
+            <h2 class="section-title" id="product-title" style="margin-bottom: 0;">APP NAME</h2>
+        </div>
+
+        <div id="step-container">
+            <h3 class="step-label" id="step-label">Choose your plan</h3>
+            <div class="options-grid" id="options-container"></div>
+        </div>
+
+        <div id="summary-container" style="display: none;">
+            <div class="summary-card">
+                <h3 class="summary-title" id="summary-app-name">App Name</h3>
+                <div class="summary-details" id="summary-details">Plan<br>Duration</div>
+                <div class="summary-price" id="summary-price">Rp 0</div>
+                <button class="btn-primary" onclick="addToCart()">ADD TO CART</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-cart" class="view-section">
+        <button class="back-btn" onclick="navigate('home')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            BACK TO MENU
+        </button>
+
+        <h2 class="section-title">YOUR CART</h2>
+
+        <div id="cart-items-container"></div>
+
+        <div id="cart-footer">
+            <div class="cart-total-section">
+                <div class="cart-total-row">
+                    <span>TOTAL</span>
+                    <span id="cart-total-price">Rp 0</span>
+                </div>
+                <button class="btn-primary" onclick="processOrder()">PESAN SEKARANG</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">ORDER COPIED!</div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
