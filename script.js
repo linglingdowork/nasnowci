@@ -26,7 +26,6 @@ const database = [
     // ================== STREAMING APPS ==================
 
     {
-    {
         category: 'STREAMING APPS',
         id: 'netflix',
         name: 'Netflix',
