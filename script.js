@@ -156,8 +156,11 @@ const database = [
             'PRIVATE BASIC': {
                 '1 MONTH': 45000
             },
+            'PRIVATE STANDART': {
+                '1 MONTH': 60000
+            },
             'PRIVATE ULTIMATE': {
-                 '1 MONTH': 90000
+                '1 MONTH': 95000
             }
         }
     },
@@ -170,6 +173,7 @@ const database = [
         stepLabels: ['Choose your plan', 'Choose duration'],
         data: {
             'SHARING': {
+                '1 WEEK' : 6000,
                 '1 MONTH': 13000
             },
             'PRIVATE': {
@@ -188,7 +192,7 @@ const database = [
             'SHARING BASIC': {
                 '1 MONTH': 22000
             },
-            'SHARING STANDART': {
+            'SHARING STANDART (LOGIN TV)': {
                 '1 MONTH': 27000
             }
         }
@@ -233,6 +237,23 @@ const database = [
         }
     },
 
+        {
+        category: 'STREAMING APPS',
+        id: 'apple-music',
+        name: 'Apple Music',
+        image: 'image/apple.jpeg',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'INDPLAN': {
+                '1 MONTH': 20000
+            },
+            'FAMPLAN/IMESS': {
+                '1 MONTH': 20000,
+                '2 MONTHS': 25000
+            }
+        }
+    },
+
     {
         category: 'STREAMING APPS',
         id: 'youtube',
@@ -246,7 +267,8 @@ const database = [
             },
             'INDPLAN': {
                 '1 MONTH': 25000,
-                '2 MONTHS': 45000
+                '2 MONTHS': 45000,
+                '3 MONTHS': 55000
             }
         }
     },
@@ -279,7 +301,7 @@ const database = [
                 '1 MONTH (2U)': 13000
             },
             'PRIVATE': {
-                '1 MONTH': 23000
+                '1 MONTH': 18000
             }
         }
     },
@@ -309,7 +331,7 @@ const database = [
             },
 
             'DESIGNER': {
-                '1 DAY': 3000,
+               '1 DAY': 3000,
                 '3 DAYS': 3500,
                 '7 DAYS': 5000,
                 '1 MONTH': 16000,
@@ -317,7 +339,7 @@ const database = [
                 '3 MONTHS': 19000,
                 '4 MONTHS': 22000,
                 '5 MONTHS': 24000,
-                '6 MONTHS': 25000
+                '6 MONTHS': 26000
             }
         }
     },
@@ -332,15 +354,32 @@ const database = [
         stepLabels: ['Choose your plan', 'Choose duration'],
 
         data: {
-            'SHARING': {
+            'SHARING (ANDROID ONLY)': {
                 '1 DAY': 3000,
                 '2 DAYS': 5000,
                 '3 DAYS': 7000,
                 '7 DAYS': 9000
             },
             'PRIVATE': {
-                '7 DAYS': 25000,
+                '7 DAYS': 20000,
                 '1 MONTH': 35000
+            }
+        }
+    },
+
+        {
+        category: 'EDITING APPS',
+        id: 'picsart',
+        name: 'Picsart',
+        image: 'image/picsart.png',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'SHARING': {
+                '1 MONTH': 10000,
+                '3 MONTHS': 15000
+            },
+            'PRIVATE': {
+                '1 MONTH': 17000
             }
         }
     },
@@ -382,8 +421,9 @@ let currentCategoryName = '';
 let currentProduct = null;
 let currentSelections = [];
 
-// Khusus Canva
+// Email khusus Canva & YouTube FAMPLAN
 let currentCanvaEmail = '';
+let currentYoutubeEmail = '';
 
 
 // ============================================================
@@ -469,8 +509,9 @@ function openProduct(productId) {
 
     currentSelections = [];
 
-    // Reset email Canva
+    // Reset email Canva & YouTube FAMPLAN
     currentCanvaEmail = '';
+    currentYoutubeEmail = '';
 
     document.getElementById('product-title').innerText =
         currentProduct.name;
@@ -502,26 +543,30 @@ function openProduct(productId) {
 
 function goBackProductStep() {
 
-    // Kalau sedang di form email Canva
-    if (
+    // Kalau sedang di form email Canva / YouTube FAMPLAN
+    const needsEmail =
         currentProduct &&
-        currentProduct.id === 'canva' &&
-        currentSelections.length === 2 &&
-        currentCanvaEmail === ''
-    ) {
-        currentSelections.pop();
-        renderProductSteps();
-        return;
-    }
+        (currentProduct.id === 'canva' ||
+         (currentProduct.id === 'youtube' && currentSelections[0] === 'FAMPLAN')) &&
+        currentSelections.length === 2;
 
-    // Kalau sudah ada email Canva
-    if (
-        currentProduct &&
-        currentProduct.id === 'canva' &&
-        currentSelections.length === 2 &&
-        currentCanvaEmail !== ''
-    ) {
-        currentCanvaEmail = '';
+    if (needsEmail) {
+        const emailValue = currentProduct.id === 'canva'
+            ? currentCanvaEmail
+            : currentYoutubeEmail;
+
+        if (emailValue === '') {
+            currentSelections.pop();
+            renderProductSteps();
+            return;
+        }
+
+        if (currentProduct.id === 'canva') {
+            currentCanvaEmail = '';
+        } else {
+            currentYoutubeEmail = '';
+        }
+
         renderProductSteps();
         return;
     }
@@ -579,20 +624,26 @@ function renderProductSteps() {
 
 
     // ========================================================
-    // KHUSUS CANVA - EMAIL
+    // KHUSUS CANVA & YOUTUBE FAMPLAN - EMAIL
     // ========================================================
 
+    const isYoutubeFamplan =
+        currentProduct.id === 'youtube' &&
+        currentSelections[0] === 'FAMPLAN';
+
     if (
-        currentProduct.id === 'canva' &&
+        (currentProduct.id === 'canva' || isYoutubeFamplan) &&
         currentSelections.length === 2 &&
-        currentCanvaEmail === ''
+        (currentProduct.id === 'canva' ? currentCanvaEmail : currentYoutubeEmail) === ''
     ) {
 
         stepContainer.style.display = 'block';
 
         summaryContainer.style.display = 'none';
 
-        stepLabel.innerText = 'Enter email';
+        stepLabel.innerText = currentProduct.id === 'canva'
+            ? 'Enter Canva email'
+            : 'Enter YouTube email';
 
         optionsContainer.innerHTML = `
 
@@ -606,8 +657,8 @@ function renderProductSteps() {
 
                 <input
                     type="email"
-                    id="canva-email"
-                    placeholder="Masukkan email Canva"
+                    id="product-email"
+                    placeholder="Masukkan email"
                     style="
                         width: 100%;
                         box-sizing: border-box;
@@ -621,7 +672,7 @@ function renderProductSteps() {
 
                 <button
                     class="option-btn"
-                    onclick="submitCanvaEmail()"
+                    onclick="submitProductEmail()"
                     style="width: 100%;"
                 >
                     Continue
@@ -656,10 +707,15 @@ function renderProductSteps() {
 
 
         // =========================
-        // SUMMARY CANVA
+        // SUMMARY CANVA / YOUTUBE FAMPLAN
         // =========================
 
-        if (currentProduct.id === 'canva') {
+        if (currentProduct.id === 'canva' ||
+            (currentProduct.id === 'youtube' && currentSelections[0] === 'FAMPLAN')) {
+
+            const email = currentProduct.id === 'canva'
+                ? currentCanvaEmail
+                : currentYoutubeEmail;
 
             document.getElementById(
                 'summary-details'
@@ -671,7 +727,7 @@ function renderProductSteps() {
                 ${currentSelections[1]}
                 <br>
 
-                Email: ${currentCanvaEmail}
+                Email: ${email}
 
             `;
 
@@ -780,38 +836,32 @@ function renderProductSteps() {
 // SUBMIT EMAIL CANVA
 // ============================================================
 
-function submitCanvaEmail() {
+function submitProductEmail() {
 
     const emailInput =
-        document.getElementById('canva-email');
+        document.getElementById('product-email');
 
     const email =
         emailInput.value.trim();
 
-
     if (!email) {
-
         showToast('Email wajib diisi!');
-
         return;
     }
-
 
     if (!emailInput.checkValidity()) {
-
         showToast('Format email tidak valid!');
-
         return;
     }
 
-
-    currentCanvaEmail =
-        email;
-
+    if (currentProduct.id === 'canva') {
+        currentCanvaEmail = email;
+    } else if (currentProduct.id === 'youtube' && currentSelections[0] === 'FAMPLAN') {
+        currentYoutubeEmail = email;
+    }
 
     renderProductSteps();
 }
-
 
 // ============================================================
 // ADD TO CART
@@ -850,11 +900,13 @@ function addToCart() {
 
         qty: 1,
 
-        // Email hanya disimpan untuk Canva
+        // Email disimpan untuk Canva & YouTube FAMPLAN
         email:
             currentProduct.id === 'canva'
                 ? currentCanvaEmail
-                : null
+                : (currentProduct.id === 'youtube' && currentSelections[0] === 'FAMPLAN'
+                    ? currentYoutubeEmail
+                    : null)
     };
 
 
@@ -979,9 +1031,9 @@ function renderCart() {
             item.selections.join(' · ');
 
 
-        // Tambahkan email Canva di cart
+        // Tambahkan email Canva / YouTube FAMPLAN di cart
         if (
-            item.id === 'canva' &&
+            (item.id === 'canva' || (item.id === 'youtube' && item.selections[0] === 'FAMPLAN')) &&
             item.email
         ) {
 
@@ -1092,7 +1144,7 @@ function renderCart() {
             </div>
 
             <label style="display:block; font-size:13px; margin-bottom:5px;">Device Login</label>
-            <input type="text" id="order-device" placeholder="contoh: TV / Android / IOS" style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; margin-bottom:10px; font:inherit; background:#fff;">
+            <input type="text" id="order-device" placeholder="contoh: Android / TV / IOS" style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; margin-bottom:10px; font:inherit; background:#fff;">
 
             <label style="display:block; font-size:13px; margin-bottom:5px;">Payment</label>
             <input type="text" value="QRIS" readonly style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #73151B; border-radius:8px; font:inherit; background:#fff; color:#333;">
@@ -1187,7 +1239,10 @@ function processOrder() {
         orderText += `\n${index + 1}. ${item.name}\n`;
         orderText += `   ${item.selections.join(' • ')}\n`;
 
-        if (item.id === 'canva' && item.email) {
+        if (
+            (item.id === 'canva' || (item.id === 'youtube' && item.selections[0] === 'FAMPLAN')) &&
+            item.email
+        ) {
             orderText += `   Email: ${item.email}\n`;
         }
 
@@ -1202,7 +1257,8 @@ function processOrder() {
         `Username: ${username}\n` +
         `Device: ${device}\n` +
         `Payment: ${payment}\n` +
-        `━━━━━━━━━━━━━━━━━━━━\n`;
+        `━━━━━━━━━━━━━━━━━━━━\n` +
+        `     NASNOWCI STORE`;
 
     const textarea = document.createElement('textarea');
     textarea.value = orderText;
