@@ -336,7 +336,7 @@ const database = [
                 '7 DAYS': 5000,
                 '1 MONTH': 16000,
                 '2 MONTHS': 18000,
-                '3 MONTHS': 19000,
+                '3 MONTHS': 20000,
                 '4 MONTHS': 22000,
                 '5 MONTHS': 24000,
                 '6 MONTHS': 26000
