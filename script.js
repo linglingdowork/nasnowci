@@ -38,8 +38,8 @@ const database = [
                 '3 DAYS': 9000,
                 '5 DAYS': 12000,
                 '1 WEEK': 15000,
-                '2 WEEKS': 24000,
-                '3 WEEKS': 34000,
+                '2 WEEKS': 26000,
+                '3 WEEKS': 36000,
                 '1 MONTH': 45000,
                 '2 MONTHS': 70000,
                 '3 MONTHS': 105000
@@ -355,14 +355,14 @@ const database = [
 
         data: {
             'SHARING (ANDROID ONLY)': {
-                '1 DAY': 3000,
-                '2 DAYS': 5000,
-                '3 DAYS': 7000,
-                '7 DAYS': 9000
+                '1 DAY': 4000,
+                '2 DAYS': 6000,
+                '3 DAYS': 8000,
+                '7 DAYS': 11000
             },
             'PRIVATE': {
-                '7 DAYS': 20000,
-                '1 MONTH': 35000
+                '7 DAYS': 25000,
+                '1 MONTH': 40000
             }
         }
     },
