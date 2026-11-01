@@ -375,11 +375,10 @@ const database = [
         stepLabels: ['Choose your plan', 'Choose duration'],
         data: {
             'SHARING': {
-                '1 MONTH': 10000,
-                '3 MONTHS': 15000
+                '1 MONTH': 15000
             },
             'PRIVATE': {
-                '1 MONTH': 17000
+                '1 MONTH': 25000
             }
         }
     },
