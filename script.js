@@ -407,7 +407,84 @@ const database = [
                 '1 YEAR': 25000
             }
         }
-    }
+    },
+
+        {
+        category: 'BUNDLING APPS 11.11',
+        id: 'PAKET NETFLIX + VIU',
+        name: 'Netflix + Viu',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'SHARING': {
+                'NETFLIX 7 DAYS + VIU 1 MONTH': 22000,
+                'NETFLIX & VIU 1 MONTH': 48000,
+                'NETFLIX 1 MONTH & VIU 6 MONTHS': 62000
+            }
+        }
+    },
+
+    {
+        category: 'BUNDLING APPS 11.11',
+        id: 'PAKET ALIGHT MOTION + CAPCUT',
+        name: 'ALIGHT MOTION + CAPCUT',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'PRIVATE': {
+                'CAPCUT 7 DAYS + ALIGHT MOTION 1 MONTH': 29000,
+                'CAPCUT & ALIGHT MOTION 1 MONTH': 38000
+            }
+        }
+    },
+
+    {
+        category: 'BUNDLING APPS 11.11',
+        id: 'PAKET NETFLIX + DISNEY',
+        name: 'NETFLIX + DISNEY',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'SHARING': {
+                'NETFLIX & DISNEY 7 DAYS': 26000,
+                'NETFLIX & DISNEY 1 MONTH': 71000
+            }
+        }
+    },
+
+    {
+        category: 'BUNDLING APPS 11.11',
+        id: 'PAKET HBO + VIU',
+        name: 'HBO + VIU',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'SHARING': {
+                'HBO + VIU 7 DAYS': 18000,
+                'HBO + VIU 1 MONTH': 28000
+            }
+        }
+    },
+
+    {
+        category: 'BUNDLING APPS 11.11',
+        id: 'PAKET PRIME VIDEO + WETV',
+        name: 'PRIME VIDEO + WETV',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'SHARING': {
+                'PRIME VIDEO + WETV 1 MONTH': 23000
+            }
+        }
+    },
+
+        {
+        category: 'BUNDLING APPS 11.11',
+        id: 'PAKET IQIYI + WETV',
+        name: 'IQIYI + WETV',
+        stepLabels: ['Choose your plan', 'Choose duration'],
+        data: {
+            'SHARING': {
+                'IQIYI+ WETV 1 MONTH': 20000
+            }
+        }
+    },
 ];
 
 
